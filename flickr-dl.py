@@ -47,9 +47,16 @@ def main():
                 print(photo['url_z'])
             elif 'url_m' in photo:  # Medium
                 print(photo['url_m'])
-            else:
-                print(photo)
-                page_max = 0
+            elif 'url_n' in photo:  # Small 320
+                print(photo['url_n'])
+            elif 'url_s' in photo:  # Small
+                print(photo['url_s'])
+            elif 'url_t' in photo:  # Thumbnail
+                print(photo['url_t'])
+            elif 'url_q' in photo:  # Large Square
+                print(photo['url_q'])
+            elif 'url_sq' in photo: # Square
+                print(photo['url_sq'])
 
         page += 1
 
