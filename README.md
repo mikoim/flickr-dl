@@ -1,5 +1,5 @@
 # flickr-dl
-The photo urls collector for Flickr written by Python.
+The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written by Python.
 
 ## How to use
     # Step 1: Enter your API key and victim ID (User name)
