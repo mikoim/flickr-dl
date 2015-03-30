@@ -2,11 +2,20 @@
 The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written by Python.
 
 ## How to use
-    # Step 1: Enter your API key and victim ID (User name)
-    vim flickr-dl.py
+    python3.4 flickr-dl.py -h
+    usage: flickr-dl.py [-h] api_key user_id
     
-    # Step 2: Collect photo urls using flickr-dl
-    python3.4 flickr-dl.py > urls.txt
+    The photo urls collector for Flickr written by Python.
     
-    # Step 3: Download a lot of photo!
+    positional arguments:
+      api_key     API key
+      user_id     Target username
+    
+    optional arguments:
+      -h, --help  show this help message and exit
+    
+    # Step 1: Collect photo urls using flickr-dl
+    python3.4 flickr-dl.py bd3e5ad7631619ffe6bb398982739e53 lolcat > urls.txt
+    
+    # Step 2: Download a lot of photo!
     cat urls.txt | xargs -L 1 -P 0 -I@ wget -o log @
