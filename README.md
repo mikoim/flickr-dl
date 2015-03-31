@@ -1,8 +1,8 @@
 # flickr-dl
 The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written by Python.
 
-写真共有サイトであるFlickrから大きなサイズの写真のURLを収集するスクリプトです．
-ユーザー名を指定すると直接ダウンロード可能なURLを集めます．
+写真共有サイトであるFlickrから大きなサイズの写真のURLを収集するスクリプトです．  
+ユーザー名を指定すると直接ダウンロード可能なURLを集めます．  
 アップロードした写真のバックアップにでも．
 
 ## How to use
