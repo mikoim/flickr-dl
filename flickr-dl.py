@@ -17,18 +17,21 @@ def main():
     parser = argparse.ArgumentParser(description='The photo urls collector for Flickr written by Python.')
     parser.add_argument('api_key', type=str, help='API key')
     parser.add_argument('user_id', type=str, help='Target username')
+    parser.add_argument('-l', type=str, default=None, dest='limit_photo_id', required=False,
+                        help='Stop collecting when its photo id found')
     arguments = parser.parse_args()
 
     api_key = arguments.api_key
     user_id = arguments.user_id
+    limit_photo_id = arguments.limit_photo_id
 
     while page <= page_max:
         print('{:d}/{:d}'.format(page, page_max), file=sys.stderr)
 
         request = urllib.request.Request(api_url + urllib.parse.urlencode(
             {'api_key': api_key, 'method': 'flickr.people.getPhotos', 'user_id': user_id,
-             'extras': 'url_sq,url_q,url_t,url_s,url_n,url_m,url_z,url_c,url_l,url_h,url_k,url_o', 'per_page': '500',
-             'page': page, 'format': 'json', 'nojsoncallback': 1}))
+             'extras': 'url_sq,url_q,url_t,url_s,url_n,url_m,url_z,url_c,url_l,url_h,url_k,url_o',
+             'per_page': '500', 'page': page, 'format': 'json', 'nojsoncallback': 1}))
         request.add_header('User-Agent', 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)')
         response = urllib.request.urlopen(request)
 
@@ -41,7 +44,11 @@ def main():
         page_max = root['photos']['pages']
 
         for photo in root['photos']['photo']:
-            if 'url_o' in photo:  # Original
+            if photo['id'] == limit_photo_id:
+                print('limit_photo_id: {:s} found.'.format(limit_photo_id))
+                page_max = 0
+                break
+            elif 'url_o' in photo:  # Original
                 print(photo['url_o'])
             elif 'url_k' in photo:  # Large 2048
                 print(photo['url_k'])
