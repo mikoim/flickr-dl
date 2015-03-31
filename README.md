@@ -19,4 +19,6 @@ The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written 
     $ python3.4 flickr-dl.py bd3e5ad7631619ffe6bb398982739e53 lolcat > urls.txt
     
     # Step 2: Download a lot of photo!
-    $ cat urls.txt | xargs -L 1 -P 0 -I@ wget -o log @
+    $ cat urls.txt | xargs -L 1 -P 4 -I@ wget -o log @
+    # other is...
+    $ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
