@@ -131,6 +131,7 @@ class Flickr:
 def main():
     parser = argparse.ArgumentParser(description='The photo urls collector for Flickr written by Python.')
     parser.add_argument('api_key', type=str, help='API key')
+    parser.add_argument('-p', dest='photo_id', default=None, type=str, help='Get a url by photo ID')
     parser.add_argument('-u', dest='user_id', default=None, type=str, help='Get urls by user ID')
     parser.add_argument('-s', dest='photoset_id', default=None, type=str, help='Get urls by photoset ID')
     parser.add_argument('-ls', dest='user_id_ls', default=None, type=str, help='Get photoset ID by user ID')
@@ -139,18 +140,24 @@ def main():
     arguments = parser.parse_args()
 
     api_key = arguments.api_key
+    limit_photo_id = arguments.limit_photo_id
+
+    photo_id = arguments.photo_id
     user_id = arguments.user_id
     photoset_id = arguments.photoset_id
-    limit_photo_id = arguments.limit_photo_id
     user_id_ls = arguments.user_id_ls
 
-    if (user_id is None and photoset_id is None and user_id_ls is None) or (user_id and photoset_id and user_id_ls):
+    count_option = len(list(filter(lambda x: x is not None, [photo_id, user_id, photoset_id, user_id_ls])))
+
+    if count_option != 1:
         print('You must use one of -u or -s, -ls.', file=sys.stderr)
         return
 
     f = Flickr(api_key)
 
-    if user_id_ls:
+    if photo_id:
+        print(f.get_biggest_url_by_photo_id(photo_id))
+    elif user_id_ls:
         f.print_photoset(user_id_ls)
     else:
         f.print_url(user_id, photoset_id, limit_photo_id)
