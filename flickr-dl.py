@@ -34,7 +34,8 @@ class Flickr:
 
         return sorted(normalized, key=lambda x: -x[0])[0][1]
 
-    def __get_biggest_url_by_extras(self, extras):
+    @staticmethod
+    def __get_biggest_url_by_extras(extras):
         if 'url_o' in extras:  # Original
             return extras['url_o']
         elif 'url_k' in extras:  # Large 2048
