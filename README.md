@@ -23,7 +23,11 @@ The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written 
 	  -s PHOTOSET_ID     Get urls by photoset ID
 	  -ls USER_ID_LS     Get photoset ID by user ID
 	  -l LIMIT_PHOTO_ID  Stop collecting when its photo id found
-    
+
+### ex) Download all photos from photo ID list
+    $ for x in `cat ids.txt`; do python3.4 flickr-dl.py -p $x API_KEY >> urls.txt; done;
+    $ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+
 ### ex) Download all photos from a particular user
     $ python3.4 flickr-dl.py -u USER_ID API_KEY > urls.txt
     $ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
