@@ -7,21 +7,22 @@ The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written 
 
 ## How to use
     $ python3.4 flickr-dl.py -h
-    usage: flickr-dl.py [-h] [-u USER_ID] [-s PHOTOSET_ID] [-ls USER_ID_LS]
-                        [-l LIMIT_PHOTO_ID]
-                        api_key
-    
-    The photo urls collector for Flickr written by Python.
-    
-    positional arguments:
-      api_key            API key
-    
-    optional arguments:
-      -h, --help         show this help message and exit
-      -u USER_ID         Get urls by user ID
-      -s PHOTOSET_ID     Get urls by photoset ID
-      -ls USER_ID_LS     Get photoset ID by user ID
-      -l LIMIT_PHOTO_ID  Stop collecting when its photo id found
+	usage: flickr-dl.py [-h] [-p PHOTO_ID] [-u USER_ID] [-s PHOTOSET_ID]
+	                    [-ls USER_ID_LS] [-l LIMIT_PHOTO_ID]
+	                    api_key
+	
+	The photo urls collector for Flickr written by Python.
+	
+	positional arguments:
+	  api_key            API key
+	
+	optional arguments:
+	  -h, --help         show this help message and exit
+	  -p PHOTO_ID        Get a url by photo ID
+	  -u USER_ID         Get urls by user ID
+	  -s PHOTOSET_ID     Get urls by photoset ID
+	  -ls USER_ID_LS     Get photoset ID by user ID
+	  -l LIMIT_PHOTO_ID  Stop collecting when its photo id found
     
 ### ex) Download all photos from a particular user
     $ python3.4 flickr-dl.py -u USER_ID API_KEY > urls.txt
