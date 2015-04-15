@@ -1,5 +1,5 @@
 # flickr-dl
-The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written by Python.
+The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written in Python.
 
 写真共有サイトであるFlickrから大きなサイズの写真のURLを収集するスクリプトです．  
 ユーザー名やアルバムのIDを指定すると直接ダウンロード可能なURLを集めます．  
