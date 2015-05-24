@@ -10,10 +10,10 @@ import argparse
 
 class Flickr:
     __api_url = 'https://api.flickr.com/services/rest/?'
-    __user_agent = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
 
-    def __init__(self, api_key):
+    def __init__(self, api_key, user_agent='Mozilla/5.001 (windows; U; NT4.0; en-us) Gecko/25250101'):
         self.__api_key = api_key
+        self.__user_agent = user_agent
 
     def __call_api(self, list_args):
         request = urllib.request.Request(self.__api_url + urllib.parse.urlencode(list_args))
@@ -131,6 +131,7 @@ class Flickr:
 def main():
     parser = argparse.ArgumentParser(description='The photo urls collector for Flickr written by Python.')
     parser.add_argument('api_key', type=str, help='API key')
+    parser.add_argument('-ua', dest='user_agent', default=None, type=str, help='Set a new User-Agent')
     parser.add_argument('-p', dest='photo_id', default=None, type=str, help='Get a url by photo ID')
     parser.add_argument('-u', dest='user_id', default=None, type=str, help='Get urls by user ID')
     parser.add_argument('-s', dest='photoset_id', default=None, type=str, help='Get urls by photoset ID')
@@ -140,6 +141,7 @@ def main():
     arguments = parser.parse_args()
 
     api_key = arguments.api_key
+    user_agent = arguments.user_agent
     limit_photo_id = arguments.limit_photo_id
 
     photo_id = arguments.photo_id
@@ -153,7 +155,10 @@ def main():
         print('You must use one of -u or -s, -ls.', file=sys.stderr)
         return
 
-    f = Flickr(api_key)
+    if user_agent:
+        f = Flickr(api_key, user_agent)
+    else:
+        f = Flickr(api_key)
 
     if photo_id:
         print(f.get_biggest_url_by_photo_id(photo_id))
