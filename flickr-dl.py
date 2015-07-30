@@ -6,12 +6,14 @@ import json
 import urllib.request
 import urllib.parse
 import argparse
+import configparser
+from os.path import expanduser
 
 
 class Flickr:
     __api_url = 'https://api.flickr.com/services/rest/?'
 
-    def __init__(self, api_key, user_agent='Mozilla/5.001 (windows; U; NT4.0; en-us) Gecko/25250101'):
+    def __init__(self, api_key, user_agent='Mozilla/5.0 (Windows; U; Win 9x 4.90; SG; rv:1.9.2.4) Gecko/20101104 Netscape/9.1.0285'):
         self.__api_key = api_key
         self.__user_agent = user_agent
 
@@ -128,32 +130,54 @@ class Flickr:
             page += 1
 
 
+def config(api_key):
+    config_file = expanduser('~/.flickr-dl')
+
+    parser = configparser.ConfigParser()
+    parser.read(config_file)
+
+    if api_key:
+        parser['Options'] = {}
+        parser['Options']['APIKey'] = api_key
+
+        parser.write(open(config_file, mode='w'))
+
+    if 'Options' in parser and 'APIKey' in parser['Options']:
+        return parser['Options']['APIKey']
+    else:
+        return None
+
+
 def main():
     parser = argparse.ArgumentParser(description='The photo urls collector for Flickr written by Python.')
-    parser.add_argument('api_key', type=str, help='API key')
-    parser.add_argument('-ua', dest='user_agent', default=None, type=str, help='Set a new User-Agent')
-    parser.add_argument('-p', dest='photo_id', default=None, type=str, help='Get a url by photo ID')
-    parser.add_argument('-u', dest='user_id', default=None, type=str, help='Get urls by user ID')
-    parser.add_argument('-s', dest='photoset_id', default=None, type=str, help='Get urls by photoset ID')
-    parser.add_argument('-ls', dest='user_id_ls', default=None, type=str, help='Get photoset ID by user ID')
-    parser.add_argument('-l', type=str, default=None, dest='limit_photo_id', required=False,
-                        help='Stop collecting when its photo id found')
+    parser.add_argument('--api', dest='api_key', type=str, help='Set new API key and save to ~/.flickr-dl')
+    parser.add_argument('--user-agent', dest='user_agent', type=str, help='Set new User-Agent')
+    parser.add_argument('--photo', dest='photo_id', type=str, help='Get url by photo ID')
+    parser.add_argument('--user', dest='user_id', type=str, help='Get urls by user ID')
+    parser.add_argument('--photo-set', dest='photo_set_id', type=str, help='Get urls by photo set ID')
+    parser.add_argument('--list-photo-set', dest='list_photo_set', type=str, help='Get list of photo set ID by user ID')
+    parser.add_argument('--stop-photo', dest='limit_photo_id', type=str, help='Stop collecting when its photo id found')
+
     arguments = parser.parse_args()
 
-    api_key = arguments.api_key
+    api_key = config(arguments.api_key)
     user_agent = arguments.user_agent
     limit_photo_id = arguments.limit_photo_id
 
     photo_id = arguments.photo_id
     user_id = arguments.user_id
-    photoset_id = arguments.photoset_id
-    user_id_ls = arguments.user_id_ls
+    photo_set_id = arguments.photo_set_id
+    list_photo_set = arguments.list_photo_set
 
-    count_option = len(list(filter(lambda x: x is not None, [photo_id, user_id, photoset_id, user_id_ls])))
+    count_option = len(list(filter(lambda x: x is not None, [photo_id, user_id, photo_set_id, list_photo_set])))
 
     if count_option != 1:
-        print('You must use one of -u or -s, -ls.', file=sys.stderr)
-        return
+        print('You must use one of --user or --photo-set, --stop-photo.', file=sys.stderr)
+        return 1
+
+    if api_key is None:
+        print('API key is undefined. You must use --api option.', file=sys.stderr)
+        return 1
 
     if user_agent:
         f = Flickr(api_key, user_agent)
@@ -162,11 +186,11 @@ def main():
 
     if photo_id:
         print(f.get_biggest_url_by_photo_id(photo_id))
-    elif user_id_ls:
-        f.print_photoset(user_id_ls)
+    elif list_photo_set:
+        f.print_photoset(list_photo_set)
     else:
-        f.print_url(user_id, photoset_id, limit_photo_id)
+        f.print_url(user_id, photo_set_id, limit_photo_id)
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())

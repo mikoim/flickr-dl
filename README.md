@@ -6,38 +6,67 @@ The photo urls collector for [Flickr](https://www.flickr.com/ "Flickr") written 
 アップロードした写真のバックアップにでも．
 
 ## How to use
-	$ python3.4 flickr-dl.py -h
-	usage: flickr-dl.py [-h] [-p PHOTO_ID] [-u USER_ID] [-s PHOTOSET_ID]
-	                    [-ls USER_ID_LS] [-l LIMIT_PHOTO_ID]
-	                    api_key
-	
-	The photo urls collector for Flickr written by Python.
-	
-	positional arguments:
-	  api_key            API key
-	
-	optional arguments:
-	  -h, --help         show this help message and exit
-	  -ua USER_AGENT     Set a new User-Agent
-	  -p PHOTO_ID        Get a url by photo ID
-	  -u USER_ID         Get urls by user ID
-	  -s PHOTOSET_ID     Get urls by photoset ID
-	  -ls USER_ID_LS     Get photoset ID by user ID
-	  -l LIMIT_PHOTO_ID  Stop collecting when its photo id found
+
+```bash
+python3.4 flickr-dl.py -h
+
+usage: flickr-dl.py [-h] [--api API_KEY] [--user-agent USER_AGENT]
+                    [--photo PHOTO_ID] [--user USER_ID]
+                    [--photo-set PHOTO_SET_ID]
+                    [--list-photo-set LIST_PHOTO_SET]
+                    [--stop-photo LIMIT_PHOTO_ID]
+
+The photo urls collector for Flickr written by Python.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --api API_KEY         Set a new API key
+  --user-agent USER_AGENT
+                        Set a new User-Agent
+  --photo PHOTO_ID      Get a url by photo ID
+  --user USER_ID        Get urls by user ID
+  --photo-set PHOTO_SET_ID
+                        Get urls by photo set ID
+  --list-photo-set LIST_PHOTO_SET
+                        Get list of photo set ID by user ID
+  --stop-photo LIMIT_PHOTO_ID
+                        Stop collecting when its photo id found
+```
+
+### ex) Set API key and save
+
+```bash
+python3.4 flickr-dl.py --api TYPE_YOUR_API_KEY
+
+# Or you can also use --api option with other operations.
+python3.4 flickr-dl.py --api TYPE_YOUR_API_KEY --user nasahqphoto
+```
 
 ### ex) Download all photos from photo ID list
-	$ for x in `cat ids.txt`; do python3.4 flickr-dl.py -p $x API_KEY >> urls.txt; done;
-	$ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+
+```bash
+for x in `cat ids.txt`; do python3.4 flickr-dl.py --photo $x >> urls.txt; done;
+cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+```
 
 ### ex) Download all photos from a particular user
-	$ python3.4 flickr-dl.py -u USER_ID API_KEY > urls.txt
-	$ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+
+```bash
+python3.4 flickr-dl.py --user USER_ID > urls.txt
+cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+```
 
 ### ex) Download all photos from a particular photoset
-	$ python3.4 flickr-dl.py -s PHOTOSET_ID API_KEY > urls.txt
-	$ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+
+```bash
+python3.4 flickr-dl.py --photo-set PHOTOSET_ID > urls.txt
+cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+```
 
 ### ex) Retrieve all photosets ID from a particular user
-	$ python3.4 flickr-dl.py -ls USER_ID API_KEY | grep KEYWORD | cut -d ' ' -f 1 > photosets.txt
-	$ for x in `cat photosets.txt`; do python3.4 flickr-dl.py -s $x API_KEY >> urls.txt; done;
-	$ cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+
+```bash
+python3.4 flickr-dl.py --list-photo-set USER_ID | grep KEYWORD | cut -d ' ' -f 1 > photosets.txt
+for x in `cat photosets.txt`; do python3.4 flickr-dl.py --photo-set $x >> urls.txt; done;
+cat urls.txt | xargs -L 1 -P 4 -I@ curl -O -s @
+```
