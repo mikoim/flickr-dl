@@ -1,5 +1,4 @@
-__author__ = 'Eshin Kunishima'
-__license__ = 'MIT'
+#!/usr/bin/env python3
 
 import sys
 import json
@@ -9,13 +8,19 @@ import argparse
 import configparser
 from os.path import expanduser
 
+__author__ = 'Eshin Kunishima'
+__license__ = 'MIT'
+
 
 class Flickr:
     __api_url = 'https://api.flickr.com/services/rest/?'
+    __user_agent = 'Mozilla/5.0 (Windows; U; Win 9x 4.90; SG; rv:1.9.2.4) Gecko/20101104 Netscape/9.1.0285'
 
-    def __init__(self, api_key, user_agent='Mozilla/5.0 (Windows; U; Win 9x 4.90; SG; rv:1.9.2.4) Gecko/20101104 Netscape/9.1.0285'):
+    def __init__(self, api_key, user_agent=None):
         self.__api_key = api_key
-        self.__user_agent = user_agent
+
+        if user_agent:
+            self.__user_agent = user_agent
 
     def __call_api(self, list_args):
         request = urllib.request.Request(self.__api_url + urllib.parse.urlencode(list_args))
@@ -176,7 +181,7 @@ def main():
         return 1
 
     if api_key is None:
-        print('API key is undefined. You must use --api option.', file=sys.stderr)
+        print('API key is undefined. You must use --api option. (It will be stored on ~/.flickr-dl)', file=sys.stderr)
         return 1
 
     if user_agent:
